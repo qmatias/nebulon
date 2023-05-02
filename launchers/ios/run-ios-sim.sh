@@ -1,10 +1,11 @@
-#/bin/bash
-set -e
+#!/bin/bash
+
+set -euo pipefail
 
 TARGET="${TARGET:-x86_64-apple-ios}"
 which dasel || brew install dasel
-APP_NAME="$(cat Cargo.toml | dasel -r toml '.package.name')"
-BUNDLE_ID="$(cat Cargo.toml | dasel -r toml '.package.metadata.bundle.identifier')"
+APP_NAME="$(dasel -f Cargo.toml '.package.name')"
+BUNDLE_ID="$(dasel -f Cargo.toml '.package.metadata.bundle.identifier')"
 
 BUNDLE_CMD="cargo bundle --target $TARGET"
 
