@@ -1,6 +1,7 @@
 use bevy::{prelude::*, window::WindowMode};
+use bevy_pancam::{PanCam, PanCamPlugin};
 
-pub const LAUNCHER_TITLE: &str = "Bevy Shell - Template";
+pub const LAUNCHER_TITLE: &str = "Nebulon";
 
 pub fn app(fullscreen: bool) -> App {
     let mode = if fullscreen {
@@ -19,12 +20,21 @@ pub fn app(fullscreen: bool) -> App {
         }),
         ..default()
     }))
-    .add_startup_system(load_icon);
+    .add_plugin(PanCamPlugin::default())
+    .add_startup_system(spawn_camera)
+    .add_startup_system(spawn_icon);
     app
 }
 
-fn load_icon(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(Camera2dBundle::default());
+fn spawn_camera(mut commands: Commands) {
+    commands.spawn(Camera2dBundle::default()).insert(PanCam {
+        grab_buttons: vec![MouseButton::Left],
+        min_scale: 0.01,
+        ..default()
+    });
+}
+
+fn spawn_icon(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(SpriteBundle {
         texture: asset_server.load("bevy.png"),
         ..default()

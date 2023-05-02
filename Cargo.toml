@@ -25,3 +25,4 @@ lto = true
 bevy = "0.10.1"
 image = "0.24.5"
 winit = "0.28.1"
+bevy_pancam = { version = "0.8.0" }
